@@ -1,0 +1,3 @@
+Ash,20,TP069875,Ash@mail.com,831162,KL,January,run123
+Chris,19,TP077321,Chris@mail.com,834343,Ipoh,December,test123
+Jon,21,TP073217,Jon@mail.com,912432,KL,May,JOnJOn123

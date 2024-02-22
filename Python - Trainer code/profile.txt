@@ -1,0 +1,3 @@
+Natalie,abc1234,natalie@mail.com 
+Ruby,ruby123,Ruby@gmail.com
+Oakley,0ak2333,oakley23@mail.com

@@ -1,0 +1,5 @@
+Chris,Tuesday,2:00pm - 4:00pm,C,Beginner
+Jon,Monday,2:00pm - 3:30pm,Python,Intermediate
+Ash,Tuesday,9:00am - 11:00am,Python,Advance
+Ash,Thursday,1:00pm - 3:00pm,SQL,Beginner
+Chris,Monday,4:00pm - 6:00pm ,Python,Beginner

@@ -1,0 +1,5 @@
+Natalie,Chris,C,Beginner,60
+Oakley,Jon,Python,Intermediate,100
+Ruby,Ash,Python,Advance,300
+Ruby,Ash,SQL,Beginner,60
+Oakley,Chris,Python,Beginner,60
