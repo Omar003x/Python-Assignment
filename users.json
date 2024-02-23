@@ -1,0 +1,20 @@
+[
+    {
+        "email": "Omar@apu.edu.my",
+        "username": "Omar",
+        "password": "Omar@",
+        "role": "Lecturer"
+    },
+    {
+        "email": "Omar",
+        "username": "omar",
+        "password": "1234",
+        "role": "student"
+    },
+    {
+        "email": "omar",
+        "username": "omar",
+        "password": "omar",
+        "role": "lecturer"
+    }
+]
