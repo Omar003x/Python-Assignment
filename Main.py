@@ -1,120 +1,133 @@
-import json
+import csv
+import datetime
+import os
 
-# Base User class
-class User:
-    def __init__(self, email, username, password, role):
-        self.email = email
-        self.username = username
-        self.password = password
-        self.role = role
+# Global variables for storing data
+students = []
+filename = "students_data.csv"
 
-    def update_profile(self):
-        print("What do you want to update?")
-        print("1. Email")
-        print("2. Password")
-        choice = input("Enter your choice: ")
-        if choice == "1":
-            self.email = input("Enter new email: ")
-            print("Email updated successfully.")
-        elif choice == "2":
-            self.password = input("Enter new password: ")
-            print("Password updated successfully.")
-        else:
-            print("Invalid choice. Please try again.")
+# Function Definitions for Admin and Lecturer Functionalities
+def load_students():
+    try:
+        with open(filename, newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                students.append(row)
+    except FileNotFoundError:
+        print("File not found, starting with an empty list of students.")
 
-# Derived classes for specific roles
-class Trainer(User):
-    def __init__(self, email, username, password):
-        super().__init__(email, username, password, "trainer")
-        # Trainer-specific attributes can be added here
+def register_student():
+    print("\n--- Register Student ---")
+    student = {
+        'name': input("Enter student's name: "),
+        'tp_number': input("Enter TP number: "),
+        'email': input("Enter email: "),
+        'contact_number': input("Enter contact number: "),
+        'address': input("Enter address: "),
+        'level': input("Enter academic level: "),
+        'module': input("Enter module for coaching: "),
+        'class_level': input("Enter class level (Beginner/Intermediate/Advanced): "),
+        'enrollment_month': datetime.datetime.now().strftime("%B"),
+    }
+    students.append(student)
+    save_students()
+    print("Student registered successfully!")
 
-class Lecturer(User):
-    def __init__(self, email, username, password):
-        super().__init__(email, username, password, "lecturer")
-        # Lecturer-specific attributes can be added here
+def save_students():
+    with open(filename, 'w', newline='') as csvfile:
+        fieldnames = ['name', 'tp_number', 'email', 'contact_number', 'address', 'level', 'module', 'class_level', 'enrollment_month']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        for student in students:
+            writer.writerow(student)
 
-class Admin(User):
-    def __init__(self, email, username, password):
-        super().__init__(email, username, password, "admin")
-
-    # Admin-specific methods
-    def register_user(self, users):
-        new_email = input("Enter new user's email: ")
-        new_username = input("Enter new user's username: ")
-        new_password = input("Enter new user's password: ")
-        new_role = input("Enter new user's role (admin/trainer/lecturer/student): ")
-        new_user = User(new_email, new_username, new_password, new_role)
-        users.append(new_user)
-        print(f"{new_role.capitalize()} '{new_username}' registered successfully.")
-
-    def delete_user(self, users):
-        username_to_delete = input("Enter the username of the user to delete: ")
-        user_found = False
-        for user in users:
-            if user.username == username_to_delete:
-                users.remove(user)
-                user_found = True
-                print(f"User '{username_to_delete}' deleted successfully.")
-                break
-        if not user_found:
-            print(f"User '{username_to_delete}' not found.")
-
-# Function to simulate loading users from a file
-def load_users():
-    # Placeholder for actual file loading logic
-    return []
-
-# Function to simulate saving users to a file
-def save_users(users):
-    # Placeholder for actual file saving logic
-    pass
-
-def main():
-    users = load_users()
-    current_user = None
-
+# Admin Menu Implementation
+def admin_menu():
     while True:
-        print("\nWelcome to the User Management System")
-        if not current_user:
-            print("1. Login")
-            print("2. Exit")
-            choice = input("Enter your choice: ")
-            if choice == "1":
-                username = input("Username: ")
-                password = input("Password: ")
-                for user in users:
-                    if user.username == username and user.password == password:
-                        current_user = user
-                        print(f"Welcome, {current_user.username}!")
-                        break
-                else:
-                    print("Invalid credentials.")
-            elif choice == "2":
-                break
+        print("\nAdmin Menu")
+        print("1. View All Students")
+        print("2. Exit")
+        choice = input("Enter your choice: ")
+        if choice == '1':
+            load_students()
+            print("Listing all students:\n")
+            for student in students:
+                print(student)
+        elif choice == '2':
+            break
         else:
-            if current_user.role == "admin":
-                admin = Admin(current_user.email, current_user.username, current_user.password)
-                print("1. Register User")
-                print("2. Delete User")
-                print("3. Logout")
-                choice = input("Enter your choice: ")
-                if choice == "1":
-                    admin.register_user(users)
-                elif choice == "2":
-                    admin.delete_user(users)
-                elif choice == "3":
-                    current_user = None
-            # Additional role-specific functionalities can be implemented here
-            else:
-                print("1. Update Profile")
-                print("2. Logout")
-                choice = input("Enter your choice: ")
-                if choice == "1":
-                    current_user.update_profile()
-                elif choice == "2":
-                    current_user = None
+            print("Invalid choice!")
 
-    save_users(users)
+# Lecturer Menu
+def lecturer_menu():
+    load_students()
+    while True:
+        print("\nLecturer Menu")
+        print("1. Register Student")
+        print("2. Exit")
+        choice = input("Enter your choice: ")
+        if choice == '1':
+            register_student()
+        elif choice == '2':
+            break
+        else:
+            print("Invalid choice!")
+
+# Trainer Menu Implementation
+def trainer_menu():
+    print("\nTrainer Menu")
+    print("1. View Assigned Modules")
+    print("2. Exit")
+    while True:
+        choice = input("Enter your choice: ")
+        if choice == '1':
+            print("Assigned modules functionality not yet implemented.")
+        elif choice == '2':
+            break
+        else:
+            print("Invalid choice!")
+
+# Student Menu Implementation
+def student_menu():
+    print("\nStudent Menu")
+    print("1. View Enrolled Modules")
+    print("2. Exit")
+    while True:
+        choice = input("Enter your choice: ")
+        if choice == '1':
+            print("Enrolled modules functionality not yet implemented.")
+        elif choice == '2':
+            break
+        else:
+            print("Invalid choice!")
+
+# Main Menu
+def main_menu():
+    print("\nMain Menu")
+    print("1. Admin Menu")
+    print("2. Lecturer Menu")
+    print("3. Trainer Menu")
+    print("4. Student Menu")
+    print("5. Exit")
+
+# Main Function
+def main():
+    while True:
+        main_menu()
+        choice = input("Enter your choice: ")
+        if choice == '1':
+            admin_menu()
+        elif choice == '2':
+            lecturer_menu()
+        elif choice == '3':
+            trainer_menu()
+        elif choice == '4':
+            student_menu()
+        elif choice == '5':
+            print("Exiting application...")
+            break
+        else:
+            print("Invalid choice!")
 
 if __name__ == "__main__":
     main()
