@@ -1,6 +1,6 @@
 import json
 
-# User base class
+# Base User class
 class User:
     def __init__(self, email, username, password, role):
         self.email = email
@@ -9,11 +9,10 @@ class User:
         self.role = role
 
     def update_profile(self):
-        print("\nUpdate Profile")
+        print("What do you want to update?")
         print("1. Email")
         print("2. Password")
         choice = input("Enter your choice: ")
-
         if choice == "1":
             self.email = input("Enter new email: ")
             print("Email updated successfully.")
@@ -23,110 +22,99 @@ class User:
         else:
             print("Invalid choice. Please try again.")
 
-# Derived classes for each user role
+# Derived classes for specific roles
 class Trainer(User):
     def __init__(self, email, username, password):
         super().__init__(email, username, password, "trainer")
-
-    # Add Trainer-specific functionalities here
+        # Trainer-specific attributes can be added here
 
 class Lecturer(User):
     def __init__(self, email, username, password):
         super().__init__(email, username, password, "lecturer")
-
-    # Add Lecturer-specific functionalities here
+        # Lecturer-specific attributes can be added here
 
 class Admin(User):
     def __init__(self, email, username, password):
         super().__init__(email, username, password, "admin")
 
-    def manage_courses(self, courses):
-        print("\nCourse Management")
-        print("1. Add Course")
-        print("2. Remove Course")
-        choice = input("Enter your choice: ")
+    # Admin-specific methods
+    def register_user(self, users):
+        new_email = input("Enter new user's email: ")
+        new_username = input("Enter new user's username: ")
+        new_password = input("Enter new user's password: ")
+        new_role = input("Enter new user's role (admin/trainer/lecturer/student): ")
+        new_user = User(new_email, new_username, new_password, new_role)
+        users.append(new_user)
+        print(f"{new_role.capitalize()} '{new_username}' registered successfully.")
 
-        if choice == "1":
-            course_name = input("Enter the course name: ")
-            courses.append(course_name)
-            print(f"Course '{course_name}' added successfully.")
-        elif choice == "2":
-            course_name = input("Enter the course name to remove: ")
-            if course_name in courses:
-                courses.remove(course_name)
-                print(f"Course '{course_name}' removed successfully.")
-            else:
-                print("Course not found.")
+    def delete_user(self, users):
+        username_to_delete = input("Enter the username of the user to delete: ")
+        user_found = False
+        for user in users:
+            if user.username == username_to_delete:
+                users.remove(user)
+                user_found = True
+                print(f"User '{username_to_delete}' deleted successfully.")
+                break
+        if not user_found:
+            print(f"User '{username_to_delete}' not found.")
 
-    def manage_users(self, users):
-        print("\nUser Management")
-        print("1. List Users")
-        print("2. Delete User")
-        choice = input("Enter your choice: ")
+# Function to simulate loading users from a file
+def load_users():
+    # Placeholder for actual file loading logic
+    return []
 
-        if choice == "1":
-            for user in users:
-                print(f"Username: {user['username']}, Role: {user['role']}")
-        elif choice == "2":
-            username_to_delete = input("Enter the username of the user to delete: ")
-            users[:] = [user for user in users if user['username'] != username_to_delete]
-            print(f"User '{username_to_delete}' deleted successfully.")
+# Function to simulate saving users to a file
+def save_users(users):
+    # Placeholder for actual file saving logic
+    pass
 
-# Functions for loading and saving user data
-def load_users(filename='users.json'):
-    try:
-        with open(filename, 'r') as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return []
-
-def save_users(users, filename='users.json'):
-    with open(filename, 'w') as f:
-        json.dump(users, f, indent=4)
-
-# Function for user login
-def login(users):
-    username = input("Enter username: ")
-    password = input("Enter password: ")
-    for user in users:
-        if user['username'] == username and user['password'] == password:
-            print(f"Welcome back, {username}!")
-            return user
-    print("Invalid username or password.")
-    return None
-
-# Function for registering a new user
-def register_user(users):
-    email = input("Enter your email: ")
-    username = input("Enter your username: ")
-    password = input("Enter your password: ")
-    role = input("Enter your role (admin/lecturer/trainer/student): ")
-
-    new_user = {'email': email, 'username': username, 'password': password, 'role': role}
-    users.append(new_user)
-    save_users(users)
-    print(f"User {username} registered successfully.")
-
-# Main function to run the application
 def main():
     users = load_users()
-    courses = []  # Placeholder for courses list
+    current_user = None
 
     while True:
         print("\nWelcome to the User Management System")
-        print("1. Login")
-        print("2. Register")
-        print("3. Exit")
-        choice = input("Enter your choice: ")
+        if not current_user:
+            print("1. Login")
+            print("2. Exit")
+            choice = input("Enter your choice: ")
+            if choice == "1":
+                username = input("Username: ")
+                password = input("Password: ")
+                for user in users:
+                    if user.username == username and user.password == password:
+                        current_user = user
+                        print(f"Welcome, {current_user.username}!")
+                        break
+                else:
+                    print("Invalid credentials.")
+            elif choice == "2":
+                break
+        else:
+            if current_user.role == "admin":
+                admin = Admin(current_user.email, current_user.username, current_user.password)
+                print("1. Register User")
+                print("2. Delete User")
+                print("3. Logout")
+                choice = input("Enter your choice: ")
+                if choice == "1":
+                    admin.register_user(users)
+                elif choice == "2":
+                    admin.delete_user(users)
+                elif choice == "3":
+                    current_user = None
+            # Additional role-specific functionalities can be implemented here
+            else:
+                print("1. Update Profile")
+                print("2. Logout")
+                choice = input("Enter your choice: ")
+                if choice == "1":
+                    current_user.update_profile()
+                elif choice == "2":
+                    current_user = None
 
-        if choice == "1":
-            user = login(users)
-            if user:
-                if user['role'] == 'admin':
-                    admin = Admin(user['email'], user['username'], user['password'])
-                    while True:
-                        print("\nAdmin Menu")
-                        print("1. Update Profile")
-                        print("2. Manage Courses")
-                        print("3. Manage Users")
-                        print("4. Delete Users")
+    save_users(users)
+
+if __name__ == "__main__":
+    main()
