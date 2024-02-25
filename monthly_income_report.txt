@@ -1,0 +1,3 @@
+trainer1,2000
+ben,5000
+cassie,3000

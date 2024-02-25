@@ -1,0 +1,5 @@
+admin@gmail.com,admin,adminpw,admin
+trainer1@gmail.com,trainer1,trainer1pw,trainer
+ben@gmail.com,ben,benpw,trainer
+cassie@gmail.com,cassie,cassiepw,trainer
+sophie@yahoo.com,sophie,sophiepw,lecturer
