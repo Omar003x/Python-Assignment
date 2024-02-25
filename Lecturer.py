@@ -1,6 +1,8 @@
 import csv
 import datetime
 
+from Main import register_student, save_students
+
 # Global variables
 students = []
 classes = ['Beginner', 'Intermediate', 'Advanced']

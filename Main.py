@@ -721,16 +721,29 @@ def save_students():
 def lecturer_menu():
     load_students()
     while True:
-        print("\nLecturer Menu")
         print("1. Register Student")
-        print("2. Exit")
+        print("2. Update Subject Enrollment")
+        print("3. View Registered Students")
+        print("4. Update Student Profile")
+        print("5. Delete Student")
+        print("6. Exit")
         choice = input("Enter your choice: ")
         if choice == '1':
             register_student()
         elif choice == '2':
+            update_enrollment()
+        elif choice == '3':
+            view_students()
+        elif choice == '4':
+            update_profile()
+        elif choice == '5':
+            delete_student()
+        elif choice == '6':
+            print("Exiting...")
             break
         else:
             print("Invalid choice!")
+
 
 # Trainer Menu Implementation
 def trainer_menu(username, password):
@@ -983,3 +996,4 @@ def main():
 
 if __name__ == "__main__":
 	main()
+ 
