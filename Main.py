@@ -1,10 +1,6 @@
 import csv
 import datetime
 import os
-from Compiled import Trainer
-
-from Lecturer import delete_student, update_enrollment, update_profile, view_students
-from symbol import trailer
 
 class User:
     def __init__(self, email, username, password, role):
@@ -57,7 +53,7 @@ class Admin(User):
         username = input("Enter new trainer's username: ")
         password = input("Enter new trainer's password: ")
 
-        new_trainer = trailer(email, username, password, [], [])
+        new_trainer = Trainer(email, username, password, [], [])
         self.trainers.append(new_trainer)
         users.append(new_trainer)
 
@@ -356,20 +352,14 @@ def update_credentials(filename, username):
 	for i,line in enumerate(lines):
 		parts = line.strip().split(",")
 		if parts[0] == username:
-			parts[1] = str(new_email())
+			parts[1] = str(new_age)
 			parts[3] = new_email
-			parts[4] = str(new_con())
-			parts[5] = str(new_address())
+			parts[4] = str(new_cont)
+			parts[5] = new_addr
 			parts[7] = new_password
 			lines[i] = ",".join(parts) + "\n"
 	with open(filename,"w") as file:
 		file.writelines(lines)
-
-def new_con():
-    return new_cont
-
-def new_email():
-    return new_age
 
 def show_req(filename, username):
 	with open(filename,"r")as file:
@@ -1006,4 +996,3 @@ def main():
 
 if __name__ == "__main__":
 	main()
- 
